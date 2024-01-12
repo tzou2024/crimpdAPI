@@ -61,6 +61,34 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-jwt-extended"
+version = "4.6.0"
+description = "Extended JWT integration with Flask"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4"
+
+[package.dependencies]
+Flask = ">=2.0,<4.0"
+PyJWT = ">=2.0,<3.0"
+Werkzeug = ">=0.14"
+
+[package.extras]
+asymmetric_crypto = ["cryptography (>=3.3.1)"]
+
+[[package]]
+name = "flask-login"
+version = "0.6.3"
+description = "User authentication and session management for Flask."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Flask = ">=1.0.4"
+Werkzeug = ">=1.0.1"
+
+[[package]]
 name = "flask-migrate"
 version = "4.0.5"
 description = "SQLAlchemy database migrations for Flask applications using Alembic."
@@ -144,6 +172,20 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "pyjwt"
+version = "2.8.0"
+description = "JSON Web Token implementation in Python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+crypto = ["cryptography (>=3.4.0)"]
+dev = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface", "cryptography (>=3.4.0)", "pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)", "pre-commit"]
+docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -216,7 +258,7 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "aae457c4a50b94f75da767445a8b356de34968240941b475926c43a8fe152d45"
+content-hash = "b9d8c89a69bb9fac3234cf14470e43eba5057d445e05e1c3536b48bf98381e98"
 
 [metadata.files]
 alembic = []
@@ -224,6 +266,8 @@ blinker = []
 click = []
 colorama = []
 flask = []
+flask-jwt-extended = []
+flask-login = []
 flask-migrate = []
 flask-sqlalchemy = []
 greenlet = []
@@ -231,6 +275,7 @@ itsdangerous = []
 jinja2 = []
 mako = []
 markupsafe = []
+pyjwt = []
 python-dotenv = []
 sqlalchemy = []
 typing-extensions = []

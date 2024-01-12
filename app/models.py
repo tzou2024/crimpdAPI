@@ -5,6 +5,7 @@ import sqlalchemy.orm as so
 #import db instance
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import logout_user
 
 #db.Model - a base class for all models
 class User(db.Model):
