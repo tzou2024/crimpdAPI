@@ -11,3 +11,4 @@ class Config(object):
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or "super-secret-key"
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
+    BASE_URL=os.environ.get('BASE_URL')
