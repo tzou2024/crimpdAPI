@@ -73,6 +73,17 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-api"
+version = "3.1"
+description = "Browsable web APIs for Flask."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Flask = ">=2.0.0"
+
+[[package]]
 name = "flask-cors"
 version = "4.0.0"
 description = "A Flask extension adding a decorator for CORS support"
@@ -281,7 +292,7 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "47b2ce5140f19bc092293e1ef5f2aa121d9b209a967b2cdf1616b7a6e33ce72b"
+content-hash = "fd4ccf1a94afc897fb8037b1b4d8bdf431ef20350052f1cba43113b95cd06025"
 
 [metadata.files]
 alembic = []
@@ -290,6 +301,7 @@ blinker = []
 click = []
 colorama = []
 flask = []
+flask-api = []
 flask-cors = []
 flask-jwt-extended = []
 flask-login = []

@@ -6,6 +6,7 @@ from flask import request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, get_jwt, \
     jwt_required
 from config import Config
+from flask_api import status
 
 @jwt.token_in_blocklist_loader
 def check_if_blacklisted_token(data, decrypted):
@@ -16,7 +17,7 @@ def check_if_blacklisted_token(data, decrypted):
     return InvalidToken.is_invalid(jti)
 
 
-@bp.route(Config.BASE_URL + "/login", methods=["POST"])
+@bp.route("/login", methods=["POST"])
 def login():
     """
     User login end-point accepts email and password.
@@ -30,16 +31,16 @@ def login():
             if len(user) == 1:
                 token = create_access_token(identity=user[0]["id"])
                 refresh_token = create_refresh_token(identity=user[0]["id"])
-                return jsonify({"token": token, "refreshToken": refresh_token})
+                return jsonify({"token": token, "refreshToken": refresh_token}), status.HTTP_200_OK
             else:
-                return jsonify({"error": "Invalid credentials"})
+                return jsonify({"error": "Invalid credentials"}), status.HTTP_401_UNAUTHORIZED
         else:           
-            return jsonify({"error":"Invalid Form"})
+            return jsonify({"error":"Invalid Form"}), status.HTTP_400_BAD_REQUEST
     except:
-        return jsonify({"error": "Invalid Form"})
+        return jsonify({"error": "Invalid Form"}), status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@bp.route(Config.BASE_URL + "/register", methods=["POST"])
+@bp.route("/register", methods=["POST"])
 def register():
     """
     End-point to handle user registration, encrypting the password and validating the email
@@ -52,21 +53,21 @@ def register():
         if len(list(filter(lambda x: x["username"] == username, users))) == 1:         
             return jsonify({"error": "Invalid Form"})
         add_user(username, pwd)
-        return jsonify({"success": True})
+        return jsonify({"success": True}), status.HTTP_201_CREATED
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@bp.route(Config.BASE_URL + "/checkiftokenexpire", methods=["POST"])
+@bp.route("/checkiftokenexpire", methods=["POST"])
 @jwt_required()
 def check_if_token_expire():
     """
     End-point for frontend to check if the token has expired or not
     """
-    return jsonify({"success": True})
+    return jsonify({"success": True}), status.HTTP_200_OK
 
 
-@bp.route(Config.BASE_URL + "/refreshtoken", methods=["POST"])
+@bp.route("/refreshtoken", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
     """
@@ -75,20 +76,20 @@ def refresh():
     """
     identity = get_jwt_identity()
     token = create_access_token(identity=identity)
-    return jsonify({"token": token})
+    return jsonify({"token": token}), status.HTTP_200_OK
 
 
-@bp.route(Config.BASE_URL + "/getcurrentuser")
+@bp.route("/getcurrentuser")
 @jwt_required()
 def current_user():
     """
     End-point to handle collecting the current user information
     """
     uid = get_jwt_identity()
-    return jsonify(get_user(uid))
+    return jsonify(get_user(uid)), status.HTTP_200_OK
 
 
-@bp.route(Config.BASE_URL + "/logout/access", methods=["POST"])
+@bp.route("/logout/access", methods=["POST"])
 @jwt_required()
 def access_logout():
     """
@@ -98,13 +99,13 @@ def access_logout():
     try:
         invalid_token = InvalidToken(jti=jti)
         invalid_token.save()
-        return jsonify({"success":True})
+        return jsonify({"success":True}), status.HTTP_200_OK
     except Exception as e:
         print(e)
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@bp.route(Config.BASE_URL + "/logout/refresh", methods=["POST"])
+@bp.route("/logout/refresh", methods=["POST"])
 @jwt_required()
 def refresh_logout():
     """
@@ -117,13 +118,13 @@ def refresh_logout():
     try:
         invalid_token = InvalidToken(jti=jti)
         invalid_token.save()
-        return jsonify({"success": True})
+        return jsonify({"success": True}), status.HTTP_200_OK
     except Exception as e:
         print(e)
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@bp.route(Config.BASE_URL + "/deleteaccount", methods=["DELETE"])
+@bp.route("/deleteaccount", methods=["DELETE"])
 @jwt_required()
 def delete_account():
     """
@@ -132,6 +133,6 @@ def delete_account():
     try:
         user = get_user(get_jwt_identity())
         remove_user(user.id)
-        return jsonify({"success": True})
+        return jsonify({"success": True}), status.HTTP_200_OK
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), status.HTTP_500_INTERNAL_SERVER_ERROR
