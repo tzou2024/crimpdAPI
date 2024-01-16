@@ -30,7 +30,8 @@ def login():
             if len(user) == 1:
                 token = create_access_token(identity=user[0]["id"])
                 refresh_token = create_refresh_token(identity=user[0]["id"])
-                return jsonify({"token": token, "refreshToken": refresh_token}), 200
+                user[0]["token"] = token
+                return jsonify({"token": token, "refreshToken": refresh_token, "user": user[0]}), 200
             else:
                 return jsonify({"error": "Invalid credentials"}), 401
         else:           
@@ -45,13 +46,18 @@ def register():
     End-point to handle user registration, encrypting the password and validating the email
     """
     try:
+        
         pwd = encrypt_pwd(request.json['pwd'])
         username = request.json['username']
+        email = request.json['email']
         
         users = get_users()
+
         if len(list(filter(lambda x: x["username"] == username, users))) == 1:         
             return jsonify({"error": "Invalid Form"})
-        add_user(username, pwd)
+        
+        add_user(email=email, username=username, pwd=pwd)
+        
         return jsonify({"success": True}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -100,6 +106,7 @@ def access_logout():
         invalid_token.save()
         return jsonify({"success":True}), 200
     except Exception as e:
+        print("error occured")
         print(e)
         return jsonify({"error": str(e)}), 500
 

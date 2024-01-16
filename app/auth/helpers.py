@@ -6,18 +6,18 @@ from hashlib import sha256
 
 def get_users():
     users = Users.query.all()
-
-    return [{"id": i.id, "username": i.username, "pwd": i.pwd} for i in users]
+    
+    return [{"id": i.id, "email": i.email, "username": i.username, "pwd": i.pwd, "role": i.role} for i in users]
 
 def get_user(user_id):
     users = Users.query.all()
     user = list(filter(lambda x: x.id == user_id, users))[0]
-    return {"id": user.id, "username": user.username, "pwd": user.pwd}
+    return {"id": user.id, "username": user.username, "email": user.email, "pwd": user.pwd, "role": user.role}
 
-def add_user(username, pwd):
-    if username and pwd :
+def add_user(email, username, pwd):
+    if username and pwd and email:
         try:
-            user = Users(username, pwd)
+            user = Users(email, username, pwd)
             user.save()
             return True
         except Exception as e:
