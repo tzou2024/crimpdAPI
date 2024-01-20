@@ -5,7 +5,7 @@ from app.auth.models import Users, InvalidToken
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, get_jwt, \
     jwt_required
-from config import Config
+# from config import Config
 
 @jwt.token_in_blocklist_loader
 def check_if_blacklisted_token(data, decrypted):
